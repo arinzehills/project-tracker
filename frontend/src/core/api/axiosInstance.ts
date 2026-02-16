@@ -1,6 +1,8 @@
 import axios from 'axios';
 
-export const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+// Use the Next.js rewrite /api route instead of direct backend URL
+// This is more secure and avoids CORS issues
+export const API_BASE_URL = '/api';
 
 const axiosInstance = axios.create({
   baseURL: API_BASE_URL,

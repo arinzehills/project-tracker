@@ -49,6 +49,12 @@
       ],
       "@types/*": [
         "./src/types/*"
+      ],
+      "@core": [
+        "./src/core"
+      ],
+      "@core/*": [
+        "./src/core/*"
       ]
     },
     "isolatedModules": true

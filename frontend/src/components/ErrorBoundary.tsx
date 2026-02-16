@@ -77,12 +77,9 @@ class ErrorBoundary extends Component<Props, State> {
   // Component sections for better organization
   renderLogo = () => (
     <div className="flex items-center gap-2 mb-8">
-      <img
-        src="/img/logo-purple.png"
-        alt="App Logo"
-        className="w-20 h-20 mx-auto mb-4"
-      />
-      <h2 className="text-2xl font-semibold text-gray-700">Qsion AI</h2>
+      <h2 className="text-2xl font-semibold text-gray-700">
+        Project Manager App
+      </h2>
     </div>
   );
 

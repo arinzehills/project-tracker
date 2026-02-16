@@ -61,4 +61,36 @@ export const ShimmerKeyValue: React.FC<{ keyWidth?: string; valueWidth?: string 
   </div>
 );
 
+export const ProjectListShimmer: React.FC<{ count?: number }> = ({ count = 6 }) => (
+  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    {Array.from({ length: count }).map((_, index) => (
+      <div key={index} className="bg-white rounded-lg shadow-md p-6">
+        {/* Header shimmer */}
+        <div className="mb-4">
+          <ShimmerText width="w-3/4" className="h-6 mb-2" />
+          <ShimmerText width="w-1/2" className="h-4" />
+        </div>
+
+        {/* Dates shimmer */}
+        <div className="grid grid-cols-2 gap-4 mb-4">
+          <div>
+            <ShimmerText width="w-1/2" className="h-3 mb-2" />
+            <ShimmerText width="w-3/4" className="h-4" />
+          </div>
+          <div>
+            <ShimmerText width="w-1/2" className="h-3 mb-2" />
+            <ShimmerText width="w-3/4" className="h-4" />
+          </div>
+        </div>
+
+        {/* Buttons shimmer */}
+        <div className="flex gap-2 mt-6 pt-4 border-t border-gray-200">
+          <ShimmerButton />
+          <ShimmerButton />
+        </div>
+      </div>
+    ))}
+  </div>
+);
+
 export default ShimmerLoader;
