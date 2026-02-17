@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Icon } from "@iconify/react";
 
 interface DashboardHeaderProps {
@@ -9,6 +10,11 @@ interface DashboardHeaderProps {
 
 const DashboardHeader: React.FC<DashboardHeaderProps> = ({ onMenuClick }) => {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const router = useRouter();
+
+  const handleLogout = () => {
+    router.push("/");
+  };
 
   return (
     <header className="bg-white border-b border-gray-50 px-4 lg:px-6 xl:px-8 py-4">
@@ -45,7 +51,10 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({ onMenuClick }) => {
             {isProfileOpen && (
               <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-50 border border-gray-200 overflow-hidden">
                 <div className="border-t border-gray-200"></div>
-                <button className="w-full text-left px-4 py-3 hover:bg-gray-100 text-red-600 text-sm transition-colors flex items-center space-x-2">
+                <button
+                  onClick={handleLogout}
+                  className="w-full text-left px-4 py-3 hover:bg-gray-100 text-red-600 text-sm transition-colors flex items-center space-x-2"
+                >
                   <Icon icon="ph:sign-out" className="h-5 w-5" />
                   <span>Logout</span>
                 </button>

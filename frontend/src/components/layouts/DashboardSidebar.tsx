@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { Icon } from '@iconify/react';
 
 export interface SidebarLink {
@@ -24,8 +24,17 @@ const DashboardSidebar: React.FC<SidebarProps> = ({
   sidebarLinks = [],
 }) => {
   const pathname = usePathname();
+  const router = useRouter();
   const [expanded, setExpanded] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
+
+  const handleLogout = () => {
+     
+    if (onClose) {
+      onClose();
+    }
+    router.push("/");
+  };
 
   useEffect(() => {
     const handleResize = () => {
@@ -136,6 +145,7 @@ const DashboardSidebar: React.FC<SidebarProps> = ({
           {/* Logout section at bottom */}
           <div className="pb-4 border-t border-gray-200 pt-4 px-2">
             <button
+              onClick={handleLogout}
               className={`w-full flex items-center gap-3 p-3 text-gray-600 hover:bg-red-50 hover:text-red-600 rounded-lg transition-all duration-200 ${
                 expanded ? '' : 'justify-center'
               }`}

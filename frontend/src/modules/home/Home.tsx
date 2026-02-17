@@ -13,7 +13,7 @@ const Home = () => {
         </p>
         <Link
           href="/projects"
-          className="inline-block px-8 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition font-medium"
+          className="inline-block w-[200px] px-8 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition font-medium"
         >
           Get Started
         </Link>
