@@ -33,8 +33,11 @@ const Projects = () => {
   const { projects, loading, error, refetch } = useProjects({
     status: filters.status,
     search,
-    sortBy: filters.sortBy || "createdAt",
     sortOrder: filters.sortOrder || "desc",
+    createdFromDate: filters.createdFromDate,
+    createdToDate: filters.createdToDate,
+    startFromDate: filters.startFromDate,
+    startToDate: filters.startToDate,
   });
   const { deleteItem } = useDelete();
 

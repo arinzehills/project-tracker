@@ -11,13 +11,24 @@ export const filterFields = [
         ],
     },
     {
-        key: "sortBy",
-        label: "Sort By",
-        type: "select" as const,
-        options: [
-            { value: "createdAt", label: "Created Date" },
-            { value: "startDate", label: "Start Date" },
-        ],
+        key: "createdFromDate",
+        label: "Created From",
+        type: "date" as const,
+    },
+    {
+        key: "createdToDate",
+        label: "Created To",
+        type: "date" as const,
+    },
+    {
+        key: "startFromDate",
+        label: "Project Starts From",
+        type: "date" as const,
+    },
+    {
+        key: "startToDate",
+        label: "Project Starts To",
+        type: "date" as const,
     },
     {
         key: "sortOrder",

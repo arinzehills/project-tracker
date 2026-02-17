@@ -4,7 +4,7 @@ import { ProjectStatus } from './types';
 const validTransitions: Record<ProjectStatus, ProjectStatus[]> = {
   active: ['on_hold', 'completed'],
   on_hold: ['active', 'completed'],
-  completed: ['active', 'on_hold'],
+  completed: [],
 };
 
 export const _createProject = async (data: any) => {
@@ -20,14 +20,24 @@ export const _createProject = async (data: any) => {
 };
 
 export const _listProjects = async (filters: any) => {
-  const { status, search, sortBy = 'createdAt', sortOrder = 'desc' } = filters;
+  const {
+    status,
+    search,
+    sortOrder = 'desc',
+    createdFromDate,
+    createdToDate,
+    startFromDate,
+    startToDate,
+  } = filters;
 
   const query: any = { deleted: false };
 
+  // Status filter
   if (status) {
     query.status = status;
   }
 
+  // Search filter
   if (search) {
     query.$or = [
       { name: { $regex: search, $options: 'i' } },
@@ -35,11 +45,31 @@ export const _listProjects = async (filters: any) => {
     ];
   }
 
-  const sortObj: any = {};
-  const validSortFields = ['createdAt', 'startDate'];
-  const sortField = validSortFields.includes(sortBy) ? sortBy : 'createdAt';
+  // Created date range filter
+  if (createdFromDate || createdToDate) {
+    query.createdAt = {};
+    if (createdFromDate) {
+      query.createdAt.$gte = new Date(createdFromDate);
+    }
+    if (createdToDate) {
+      query.createdAt.$lte = new Date(createdToDate);
+    }
+  }
+
+  // Project start date range filter
+  if (startFromDate || startToDate) {
+    query.startDate = {};
+    if (startFromDate) {
+      query.startDate.$gte = new Date(startFromDate);
+    }
+    if (startToDate) {
+      query.startDate.$lte = new Date(startToDate);
+    }
+  }
+
+  // Sort by created date (ascending/descending)
   const order = sortOrder === 'asc' ? 1 : -1;
-  sortObj[sortField] = order;
+  const sortObj = { createdAt: order } as any;
 
   return await Project.find(query).sort(sortObj);
 };

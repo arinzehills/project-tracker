@@ -93,16 +93,26 @@ All tests use:
 
 ## Features
 
+### Core Features
 - Create, read, update, and delete projects
 - Filter projects by status
 - Search projects by name or client name
 - Sort projects by creation date or start date
 - Track project status (active, on_hold, completed)
+
+### Extra Field: Priority
+**Justification:** Added `priority` field (high, medium, low) to allow better project triaging and workload management. Enables users to quickly identify critical vs. low-priority projects at a glance.
+
+### Frontend Features
 - **Project Details Side Panel** - Slide-in animated panel with blurred backdrop
 - **More Options Menu** - Per-card dropdown with View & Delete actions
 - **Live Status/Priority Updates** - Change project status and priority from detail panel with `UpdateStateListComponent`
 - **Custom Input Components** - TypeScript InputField and CustomDropDown components
 - **Animated Modals** - Add project modal with smooth Framer Motion animations
+- **Grouped List View** - Projects organized by status sections (In Progress, On Hold, Completed) with collapsible headers
+- **Grid/Kanban View** - Horizontal 3-column layout showing status groups as cards with scrollable project lists
+- **View Toggle** - Switch between list and grid views with a single button
+- **Responsive Design** - Mobile-friendly layouts for both list and grid views
 
 ## API Endpoints
 
@@ -195,6 +205,39 @@ Error (400):
 }
 ```
 
+#### 4b. Update Project (Generic)
+```
+PATCH /api/projects/:id
+Content-Type: application/json
+
+Request (update status):
+{
+  "status": "on_hold"
+}
+
+Request (update priority):
+{
+  "priority": "high"
+}
+
+Request (update both):
+{
+  "status": "on_hold",
+  "priority": "high"
+}
+
+Allowed Fields:
+  - status: active | on_hold | completed (with valid transitions)
+  - priority: high | medium | low
+
+Response (200):
+{
+  "success": true,
+  "message": "Project updated successfully",
+  "data": { ...updated project... }
+}
+```
+
 #### 5. Delete Project (Soft Delete)
 ```
 DELETE /api/projects/:id
@@ -227,31 +270,20 @@ Error (404):
 3. **Mongoose with TypeScript**: Full type safety for database models
 4. **Joi validation middleware**: Validates request body/query before controller execution
 
-## Recent Updates (Frontend Enhancements)
+## Key Implementation Details
 
-### New Components
-1. **UpdateStateListComponent** - Dropdown for changing project status/priority
-   - Reusable for both status and priority updates
-   - Real-time API calls with loading states
-   - Color-coded options with checkmark indicator
+**Frontend:**
+- List and Grid (Kanban) views with status grouping
+- Live status/priority updates via API
+- Animated modals and side panels
+- Custom hooks for state management (`useProjectView`, `useProjectFilters`)
+- TypeScript components throughout
 
-2. **Enhanced ProjectDetail** - Full side panel with:
-   - Animated slide-in from right (Framer Motion)
-   - Blurred backdrop (glass-morphism effect)
-   - Live status/priority updaters
-   - Time remaining calculation
-   - Delete functionality
-
-3. **ProjectCard Enhancements**
-   - More options menu (⋮) dropdown
-   - View & Delete actions
-   - Click entire card to open detail panel
-
-### Key Changes
-- Converted `CustomDropDown` from JSX to TypeScript
-- Added custom `InputField` and `CustomDropDown` to `AddProjectModal`
-- Flexible, responsive layout for search/filter bar
-- Fixed `usePatch` hook integration (use `updateItem` not `execute`)
+**Backend:**
+- Enforced status transitions (completed → no changes)
+- Soft delete pattern with audit trails
+- Input validation via Joi schemas
+- Centralized error handling
 
 ## Debugging Notes
 - **Error**: `patchProject is not a function` - Fixed by using `updateItem` from `usePatch` hook

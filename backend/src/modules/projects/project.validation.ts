@@ -12,8 +12,12 @@ export const createProjectSchema = Joi.object({
 export const listProjectsSchema = Joi.object({
   status: Joi.string().valid('active', 'on_hold', 'completed').optional(),
   search: Joi.string().optional(),
-  sortBy: Joi.string().valid('createdAt', 'startDate').default('createdAt'),
   sortOrder: Joi.string().valid('asc', 'desc').default('desc'),
+  // Date range filters
+  createdFromDate: Joi.date().optional(),
+  createdToDate: Joi.date().min(Joi.ref('createdFromDate')).optional(),
+  startFromDate: Joi.date().optional(),
+  startToDate: Joi.date().min(Joi.ref('startFromDate')).optional(),
 }).unknown(true);
 
 export const updateProjectStatusSchema = Joi.object({

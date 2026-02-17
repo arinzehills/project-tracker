@@ -10,6 +10,8 @@ import { getDaysRemaining } from "../utils/getDaysRemaining";
 import { formatDateRange, formatMetadataDate } from "../utils/dateFormatter";
 import Button from "@/components/Button";
 import { statusColors, priorityColors } from "../constants/statusColors";
+import type { PriorityType } from "@/components/PriorityBadge";
+import type { StatusType } from "@/components/StatusBadge";
 import ConfirmModal from "@/components/AnimatedModal/ConfirmModal";
 
 interface ProjectDetailProps {
@@ -25,11 +27,11 @@ const ProjectDetail: React.FC<ProjectDetailProps> = ({
   project,
   onDelete,
 }) => {
-  const [currentStatus, setCurrentStatus] = useState(
-    project?.status || "active",
+  const [currentStatus, setCurrentStatus] = useState<StatusType>(
+    (project?.status as StatusType) || "active",
   );
-  const [currentPriority, setCurrentPriority] = useState(
-    project?.priority || "medium",
+  const [currentPriority, setCurrentPriority] = useState<PriorityType>(
+    (project?.priority as PriorityType) || "medium",
   );
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const { updateItem } = usePatch();
@@ -54,7 +56,7 @@ const ProjectDetail: React.FC<ProjectDetailProps> = ({
     onClose();
   };
 
-  const handleStatusUpdate = async (newStatus: string) => {
+  const handleStatusUpdate = async (newStatus: StatusType) => {
     if (!project) return;
     try {
       await updateItem(
@@ -74,7 +76,7 @@ const ProjectDetail: React.FC<ProjectDetailProps> = ({
     }
   };
 
-  const handlePriorityUpdate = async (newPriority: string) => {
+  const handlePriorityUpdate = async (newPriority: PriorityType) => {
     if (!project) return;
     try {
       await updateItem(

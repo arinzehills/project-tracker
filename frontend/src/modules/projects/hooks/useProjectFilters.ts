@@ -5,7 +5,7 @@ import { useState } from 'react';
 export interface FilterField {
   key: string;
   label: string;
-  type: 'select' | 'text' | 'checkbox';
+  type: 'select' | 'text' | 'checkbox' | 'date';
   options?: { value: string; label: string }[];
 }
 

@@ -6,22 +6,31 @@ import type { Project } from '@/modules/projects/types/project';
 interface UseProjectsOptions {
   status?: string;
   search?: string;
-  sortBy?: string;
   sortOrder?: string;
+  createdFromDate?: string;
+  createdToDate?: string;
+  startFromDate?: string;
+  startToDate?: string;
   canRunImmediately?: boolean;
 }
 
 export const useProjects = ({
   status,
   search,
-  sortBy = 'createdAt',
   sortOrder = 'desc',
+  createdFromDate,
+  createdToDate,
+  startFromDate,
+  startToDate,
   canRunImmediately = true,
 }: UseProjectsOptions = {}) => {
   const params = new URLSearchParams();
   if (status) params.append('status', status);
   if (search) params.append('search', search);
-  params.append('sortBy', sortBy);
+  if (createdFromDate) params.append('createdFromDate', createdFromDate);
+  if (createdToDate) params.append('createdToDate', createdToDate);
+  if (startFromDate) params.append('startFromDate', startFromDate);
+  if (startToDate) params.append('startToDate', startToDate);
   params.append('sortOrder', sortOrder);
 
   const queryString = params.toString();

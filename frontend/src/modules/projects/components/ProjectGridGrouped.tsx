@@ -25,7 +25,9 @@ const ProjectGridGrouped = ({
 }: ProjectGridGroupedProps) => {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [isDetailOpen, setIsDetailOpen] = useState(false);
-  const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({
+  const [expandedSections, setExpandedSections] = useState<
+    Record<string, boolean>
+  >({
     active: true,
     on_hold: true,
     completed: true,
@@ -103,85 +105,84 @@ const ProjectGridGrouped = ({
 
   return (
     <>
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {(Object.keys(groupedProjects) as Array<keyof typeof groupedProjects>).map(
-          (statusKey) => {
-            const projectsInSection = groupedProjects[statusKey];
-            const config = statusConfig[statusKey];
-            const isExpanded = expandedSections[statusKey];
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6  ">
+        {(
+          Object.keys(groupedProjects) as Array<keyof typeof groupedProjects>
+        ).map((statusKey) => {
+          const projectsInSection = groupedProjects[statusKey];
+          const config = statusConfig[statusKey];
+          const isExpanded = expandedSections[statusKey];
 
-            return (
-              <div
-                key={statusKey}
-                className="rounded-lg border border-gray-200 overflow-hidden bg-white flex flex-col"
+          return (
+            <div
+              key={statusKey}
+              className="rounded-lg border border-gray-200 overflow-hidden bg-white flex flex-col  "
+              style={{ minHeight: "60vh" }}
+            >
+              {/* Section Header */}
+              <button
+                onClick={() => toggleSection(statusKey)}
+                className="w-full flex items-center justify-between p-4 bg-gray-50 hover:bg-gray-100 transition-colors border-b border-gray-200"
               >
-                {/* Section Header */}
-                <button
-                  onClick={() => toggleSection(statusKey)}
-                  className="w-full flex items-center justify-between p-4 bg-gray-50 hover:bg-gray-100 transition-colors border-b border-gray-200"
-                >
-                  <div className="flex items-center gap-3 flex-1 text-left">
-                    <Icon
-                      icon={config.icon}
-                      className={`text-2xl ${config.color} flex-shrink-0`}
+                <div className="flex items-center gap-3 flex-1 text-left">
+                  <Icon
+                    icon={config.icon}
+                    className={`text-2xl ${config.color} flex-shrink-0`}
+                  />
+                  <div className="min-w-0">
+                    <h3 className="text-lg font-semibold text-gray-900 truncate">
+                      {config.label}
+                    </h3>
+                    <p className="text-xs text-gray-500">
+                      {projectsInSection.length}{" "}
+                      {projectsInSection.length === 1 ? "project" : "projects"}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2 flex-shrink-0 ml-2">
+                  <span
+                    className={`px-3 py-1 rounded-full text-sm font-medium ${config.badgeColor}`}
+                  >
+                    {projectsInSection.length}
+                  </span>
+                  <Icon
+                    icon={isExpanded ? "mdi:chevron-up" : "mdi:chevron-down"}
+                    className="text-xl text-gray-400"
+                  />
+                </div>
+              </button>
+
+              {/* Section Content - Vertical Stack */}
+              {isExpanded && projectsInSection.length > 0 && (
+                <div className="flex-1 overflow-y-auto p-3 space-y-3">
+                  {projectsInSection.map((project) => (
+                    <ProjectGridCard
+                      key={project._id}
+                      project={project}
+                      onView={handleViewProject}
+                      onDelete={onDelete}
                     />
-                    <div className="min-w-0">
-                      <h3 className="text-lg font-semibold text-gray-900 truncate">
-                        {config.label}
-                      </h3>
-                      <p className="text-xs text-gray-500">
-                        {projectsInSection.length}{" "}
-                        {projectsInSection.length === 1 ? "project" : "projects"}
-                      </p>
-                    </div>
-                  </div>
+                  ))}
+                </div>
+              )}
 
-                  <div className="flex items-center gap-2 flex-shrink-0 ml-2">
-                    <span
-                      className={`px-3 py-1 rounded-full text-sm font-medium ${config.badgeColor}`}
-                    >
-                      {projectsInSection.length}
-                    </span>
-                    <Icon
-                      icon={
-                        isExpanded ? "mdi:chevron-up" : "mdi:chevron-down"
-                      }
-                      className="text-xl text-gray-400"
-                    />
-                  </div>
-                </button>
+              {/* Empty Section */}
+              {isExpanded && projectsInSection.length === 0 && (
+                <div className="flex-1 flex items-center justify-center py-8 text-gray-500">
+                  <p className="text-sm">No projects</p>
+                </div>
+              )}
 
-                {/* Section Content - Vertical Stack */}
-                {isExpanded && projectsInSection.length > 0 && (
-                  <div className="flex-1 overflow-y-auto p-3 space-y-3">
-                    {projectsInSection.map((project) => (
-                      <ProjectGridCard
-                        key={project._id}
-                        project={project}
-                        onView={handleViewProject}
-                        onDelete={onDelete}
-                      />
-                    ))}
-                  </div>
-                )}
-
-                {/* Empty Section */}
-                {isExpanded && projectsInSection.length === 0 && (
-                  <div className="flex-1 flex items-center justify-center py-8 text-gray-500">
-                    <p className="text-sm">No projects</p>
-                  </div>
-                )}
-
-                {/* Collapsed State */}
-                {!isExpanded && projectsInSection.length > 0 && (
-                  <div className="p-4 text-center text-gray-500">
-                    <p className="text-xs">Click to expand</p>
-                  </div>
-                )}
-              </div>
-            );
-          }
-        )}
+              {/* Collapsed State */}
+              {!isExpanded && projectsInSection.length > 0 && (
+                <div className="p-4 text-center text-gray-500">
+                  <p className="text-xs">Click to expand</p>
+                </div>
+              )}
+            </div>
+          );
+        })}
       </div>
 
       {/* Project Detail Side Panel */}

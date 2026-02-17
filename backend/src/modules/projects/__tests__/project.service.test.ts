@@ -9,7 +9,7 @@ import { Project } from '../models/projectModel';
 import mongoose from 'mongoose';
 
 // Mock Mongoose
-jest.mock('../schema/Project');
+jest.mock('../models/projectModel');
 
 describe('Project Service', () => {
   const mockProjectData = {

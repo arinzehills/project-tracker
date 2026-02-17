@@ -85,7 +85,7 @@ export const ProjectFilter = ({
           <div className="space-y-4 mb-4">
             {fields.map((field) => (
               <div key={field.key}>
-                <label className="block text-sm font-medium text-gray-700 mb-20">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
                   {field.label}
                 </label>
 
