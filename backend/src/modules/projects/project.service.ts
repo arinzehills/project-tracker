@@ -4,7 +4,7 @@ import { ProjectStatus } from './types';
 const validTransitions: Record<ProjectStatus, ProjectStatus[]> = {
   active: ['on_hold', 'completed'],
   on_hold: ['active', 'completed'],
-  completed: [],
+  completed: ['active', 'on_hold'],
 };
 
 export const _createProject = async (data: any) => {
@@ -74,6 +74,37 @@ export const _updateProjectStatus = async (
   }
 
   project.status = newStatus;
+  return await project.save();
+};
+
+export const _updateProject = async (id: string, updates: any) => {
+  const project = await Project.findOne({ _id: id, deleted: false });
+
+  if (!project) {
+    throw new Error('Project not found');
+  }
+
+  // Handle status updates with transition validation
+  if (updates.status) {
+    const currentStatus = project.status as ProjectStatus;
+    const newStatus = updates.status as ProjectStatus;
+    const allowedTransitions = validTransitions[currentStatus];
+
+    if (!allowedTransitions.includes(newStatus)) {
+      throw new Error(
+        `Cannot transition from '${currentStatus}' to '${newStatus}'. Allowed transitions: ${allowedTransitions.join(', ') || 'none'}`
+      );
+    }
+  }
+
+  // Update allowed fields
+  const allowedFields = ['status', 'priority'];
+  allowedFields.forEach((field) => {
+    if (field in updates) {
+      (project as any)[field] = updates[field];
+    }
+  });
+
   return await project.save();
 };
 

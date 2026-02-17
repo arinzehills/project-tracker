@@ -9,6 +9,7 @@ import UpdateStateListComponent from "./UpdateStateListComponent";
 import { getDaysRemaining } from "../utils/getDaysRemaining";
 import { formatDateRange, formatMetadataDate } from "../utils/dateFormatter";
 import Button from "@/components/Button";
+import { statusColors, priorityColors } from "../constants/statusColors";
 import ConfirmModal from "@/components/AnimatedModal/ConfirmModal";
 
 interface ProjectDetailProps {
@@ -41,17 +42,6 @@ const ProjectDetail: React.FC<ProjectDetailProps> = ({
     }
   }, [project]);
 
-  const statusColors: Record<string, { bg: string; text: string }> = {
-    active: { bg: "bg-green-100", text: "text-green-800" },
-    on_hold: { bg: "bg-yellow-100", text: "text-yellow-800" },
-    completed: { bg: "bg-blue-100", text: "text-blue-800" },
-  };
-
-  const priorityColors: Record<string, { bg: string; text: string }> = {
-    high: { bg: "bg-red-100", text: "text-red-800" },
-    medium: { bg: "bg-purple-100", text: "text-purple-800" },
-    low: { bg: "bg-lime-100", text: "text-lime-800" },
-  };
 
   const handleDeleteClick = () => {
     setIsDeleteModalOpen(true);
@@ -223,10 +213,7 @@ const ProjectDetail: React.FC<ProjectDetailProps> = ({
                     <p className="text-xs font-semibold text-gray-500 uppercase mb-3">
                       Project Duration
                     </p>
-                    <div
-                      className="flex items-center gap-3 bg-gray-100 rounded-full px-4 py-2 mb-4 w-[200px]"
-                      style={{ width: 300 }}
-                    >
+                    <div className="flex items-center gap-3 bg-gray-100 rounded-full px-4 py-2 mb-4 ">
                       <Icon
                         icon="mdi:calendar"
                         className="text-lg text-gray-600"

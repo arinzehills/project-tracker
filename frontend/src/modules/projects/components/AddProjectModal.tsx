@@ -161,10 +161,10 @@ const AddProjectModal = ({
             }
           />
 
-          {/* Start Date */}
+          {/* Start Date & Time */}
           <InputField
-            type="date"
-            label="Start Date"
+            type="datetime-local"
+            label="Start Date & Time"
             name="startDate"
             value={formData.startDate}
             onChange={handleChange}
@@ -172,10 +172,10 @@ const AddProjectModal = ({
             showRequired
           />
 
-          {/* End Date */}
+          {/* End Date & Time */}
           <InputField
-            type="date"
-            label="End Date"
+            type="datetime-local"
+            label="End Date & Time"
             name="endDate"
             value={formData.endDate}
             onChange={handleChange}

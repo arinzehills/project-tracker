@@ -4,6 +4,7 @@ import {
   listProjectsController,
   getProjectByIdController,
   updateProjectStatusController,
+  updateProjectController,
   deleteProjectController,
 } from './project.controller';
 import {
@@ -30,6 +31,9 @@ router.patch(
   validationMiddleware(updateProjectStatusSchema),
   updateProjectStatusController
 );
+
+// PATCH /api/projects/:id - Update project (generic update for status, priority, etc.)
+router.patch('/:id', updateProjectController);
 
 // DELETE /api/projects/:id - Delete project (soft delete)
 router.delete('/:id', deleteProjectController);

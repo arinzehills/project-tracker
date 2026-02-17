@@ -4,6 +4,7 @@ import {
   _listProjects,
   _getProjectById,
   _updateProjectStatus,
+  _updateProject,
   _deleteProject,
 } from './project.service';
 import { successResponse } from '../../utils/baseApiResponse';
@@ -36,6 +37,14 @@ export const updateProjectStatusController = asyncHandler(
     const id = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
     const project = await _updateProjectStatus(id, req.body.status);
     res.json(successResponse('Project status updated successfully', project));
+  }
+);
+
+export const updateProjectController = asyncHandler(
+  async (req: Request, res: Response) => {
+    const id = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
+    const project = await _updateProject(id, req.body);
+    res.json(successResponse('Project updated successfully', project));
   }
 );
 
