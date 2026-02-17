@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+import { SpinnerLoader } from "./Loaders/SpinnerLoader";
+
 const Button = ({
   width,
   height,
@@ -26,11 +28,7 @@ const Button = ({
   const classNames = `${buttonColor} ${textColor} inline-block ${styles} ${widthStyle} ${heightStyle} ${finalBorderClass}`;
 
   return (
-    <button
-      className={classNames}
-      disabled={disabled}
-      {...rest}
-    >
+    <button className={classNames} disabled={disabled} {...rest}>
       {!loading ? (
         <>
           {prefixIcon && <span className="mr-2">{prefixIcon}</span>}

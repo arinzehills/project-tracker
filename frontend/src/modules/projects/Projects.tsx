@@ -1,13 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { Icon } from "@iconify/react";
 import ProjectList from "./components/ProjectList";
 import ProjectSearch from "./components/ProjectSearch";
 import ProjectFilter from "./components/ProjectFilter";
 import ActiveFilterChips from "./components/ActiveFilterChips";
-import AddProjectModal from "./components/AddProjectModal";
 import Button from "@components/Button";
+import AddProjectModal from "./components/AddProjectModal";
 
 const Projects = () => {
   const [filters, setFilters] = useState<Record<string, string>>({});
@@ -83,9 +82,9 @@ const Projects = () => {
         </div>
 
         {/* Search & Filter Bar */}
-        <div className="bg-white rounded-lg shadow-md p-6 mb-6 flex flex-col sm:flex-row gap-4 sm:gap-6 items-start sm:items-center justify-between">
-          <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center flex-1 w-full">
-            <div className="flex-1 w-full">
+        <div className="bg-white rounded-lg shadow-md p-6 mb-6 overflow-visible">
+          <div className="flex flex-col sm:flex-row gap-4 items-center justify-between">
+            <div className="w-full  ">
               <ProjectSearch
                 searchTerm={search}
                 handleSearchChange={handleSearchChange}
@@ -99,14 +98,14 @@ const Projects = () => {
                 initialFilters={filters}
               />
             </div>
+            <Button
+              onClick={() => setIsAddModalOpen(true)}
+              buttonColor="bg-indigo-600 hover:bg-indigo-700"
+              textColor="text-white"
+            >
+              + Add Project
+            </Button>
           </div>
-          <Button
-            onClick={() => setIsAddModalOpen(true)}
-            buttonColor="bg-indigo-600 hover:bg-indigo-700"
-            textColor="text-white"
-          >
-            + Add Project
-          </Button>
         </div>
 
         {/* Active Filters Display */}
@@ -140,8 +139,6 @@ const Projects = () => {
           sortOrder={filters.sortOrder || "desc"}
         />
       </div>
-
-      {/* Add Project Modal */}
       <AddProjectModal
         isOpen={isAddModalOpen}
         onClose={() => setIsAddModalOpen(false)}

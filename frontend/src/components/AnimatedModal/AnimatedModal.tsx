@@ -74,7 +74,7 @@ const AnimatedModal: React.FC<AnimatedModalProps> = ({
               initial={{ scale: 0 }}
               animate={{ scale: 1, transition: { duration: 0.2 } }}
               exit={{ scale: 0 }}
-              className={`${maxWidthClass} bg-background w-full rounded-md relative flex flex-col overflow-y-auto max-h-[95vh]`}
+              className={`${maxWidthClass} bg-white w-full rounded-md relative flex flex-col overflow-y-auto max-h-[95vh]`}
               onClick={stopPropagation}
               style={modalStyle}
             >

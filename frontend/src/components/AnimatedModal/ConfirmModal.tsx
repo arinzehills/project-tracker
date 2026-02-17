@@ -79,7 +79,7 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
       canClose={true}
       maxWidthClass="max-w-md p-6"
     >
-      <div className="pb-8 flex items-center justify-center flex-col gap-4 w-full">
+      <div className="pb-8 flex items-center justify-center flex-col gap-4 w-full bg-white">
         <div
           className={`${iconConfig.bgColor}  rounded-full flex items-center justify-center w-16 h-16 text-center`}
         >
@@ -98,24 +98,13 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
           </span>
         </div>
         {children && <div className="w-full">{children}</div>}
-        <div className="flex flex-col gap-3 w-full mt-2">
-          <Button
-            buttonColor={"bg-purple-gradient text-white rounded-2xl"}
-            onClick={onConfirm}
-            loading={loading}
-            height={"h-[60px]"}
-            width="full"
-            borderClass=""
-          >
+        <div className="flex items-center justify-between gap-3 w-full mt-2 self-end mt-20">
+          <Button onClick={onConfirm} loading={loading}>
             {confirmText}
           </Button>
           <Button
-            buttonColor={"bg-transparent"}
-            height={"h-[60px]"}
-            textColor="text-brand-gold"
+            buttonColor={"bg-red-500"}
             onClick={() => setOpenModal(false)}
-            width="full"
-            borderClass="border border-gray-200"
           >
             {cancelText}
           </Button>

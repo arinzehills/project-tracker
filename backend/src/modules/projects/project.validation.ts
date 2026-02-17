@@ -4,6 +4,7 @@ export const createProjectSchema = Joi.object({
   name: Joi.string().trim().required().min(1),
   clientName: Joi.string().trim().required().min(1),
   status: Joi.string().valid('active', 'on_hold', 'completed').default('active'),
+  priority: Joi.string().valid('high', 'medium', 'low').default('medium'),
   startDate: Joi.date().required(),
   endDate: Joi.date().min(Joi.ref('startDate')).optional(),
 });

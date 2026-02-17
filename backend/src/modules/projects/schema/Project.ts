@@ -1,10 +1,11 @@
 import mongoose, { Schema, Document } from 'mongoose';
-import { ProjectStatus } from '../types';
+import { ProjectStatus, ProjectPriority } from '../types';
 
 interface IProjectDocument extends Document {
   name: string;
   clientName: string;
   status: ProjectStatus;
+  priority: ProjectPriority;
   startDate: Date;
   endDate?: Date;
   deleted: boolean;
@@ -31,6 +32,14 @@ const projectSchema = new Schema<IProjectDocument>(
         message: 'Status must be one of: active, on_hold, completed',
       },
       default: 'active',
+    },
+    priority: {
+      type: String,
+      enum: {
+        values: ['high', 'medium', 'low'] as ProjectPriority[],
+        message: 'Priority must be one of: high, medium, low',
+      },
+      default: 'medium',
     },
     startDate: {
       type: Date,

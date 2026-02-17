@@ -3,6 +3,7 @@ export interface Project {
   name: string;
   clientName: string;
   status: 'active' | 'on_hold' | 'completed';
+  priority: 'high' | 'medium' | 'low';
   startDate: string;
   endDate?: string;
   createdAt: string;
@@ -11,11 +12,13 @@ export interface Project {
 }
 
 export type ProjectStatus = 'active' | 'on_hold' | 'completed';
+export type ProjectPriority = 'high' | 'medium' | 'low';
 
 export interface CreateProjectInput {
   name: string;
   clientName: string;
   status?: ProjectStatus;
+  priority?: ProjectPriority;
   startDate: string;
   endDate?: string;
 }
