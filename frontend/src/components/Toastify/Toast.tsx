@@ -14,6 +14,7 @@ export const Toast = () => {
       pauseOnHover
       theme="colored"
       style={{ zIndex: 999999999 }}
+      aria-label="Notifications"
     />
   );
 };

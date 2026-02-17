@@ -59,8 +59,8 @@ export function useGet<T = unknown>(
 
     try {
       const response = await axiosInstance.get<ApiResponse<T>>(endpoint, options);
-      const responseData = response.data.data;
-      setData(responseData);
+      const responseData = response.data.data ?? null;
+      setData(responseData as T | null);
 
       if (shouldUseCache) {
         cache.set(cacheKey, {

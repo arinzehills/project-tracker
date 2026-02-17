@@ -2,6 +2,7 @@ import express, { Application, Request, Response } from 'express';
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import bodyParser from 'body-parser';
+import path from 'path';
 import { projectRouter } from './modules';
 import { errorHandler } from './middlewares/errorHandler.middleware';
 
@@ -28,13 +29,21 @@ app.use((_req: Request, res: Response, next) => {
   next();
 });
 
+// Serve static frontend files (Next.js build output)
+app.use(express.static(path.join(__dirname, '../public')));
+
+// API Routes (before static file fallback)
+app.use('/api/projects', projectRouter);
+
 // Health check
-app.get('/', (req: Request, res: Response) => {
+app.get('/api', (req: Request, res: Response) => {
   res.json({ message: 'Project Tracker API is running!' });
 });
 
-// Routes
-app.use('/api/projects', projectRouter);
+// Fallback to index.html for SPA (Next.js routes)
+app.get('*', (req: Request, res: Response) => {
+  res.sendFile(path.join(__dirname, '../public', 'index.html'));
+});
 
 // Error handling middleware (must be last)
 app.use(errorHandler);

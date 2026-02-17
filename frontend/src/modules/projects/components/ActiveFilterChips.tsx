@@ -42,7 +42,7 @@ const ActiveFilterChips = ({
   };
 
   const activeFilters = Object.entries(filters).filter(
-    ([key, value]) => {
+    ([, value]) => {
       if (value === undefined || value === null || value === '') return false;
       return true;
     }

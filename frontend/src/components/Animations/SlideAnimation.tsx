@@ -7,6 +7,7 @@ const SlideAnimation = ({ children }: any) => {
   const handleSlide = () => setSlideIn(!slideIn);
   useEffect(() => {
     handleSlide();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
     <AnimatePresence>

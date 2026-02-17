@@ -13,23 +13,32 @@ import ProjectCard from "./ProjectCard";
 interface ProjectListProps {
   status?: string;
   search?: string;
-  sortBy?: string;
   sortOrder?: string;
+  createdFromDate?: string;
+  createdToDate?: string;
+  startFromDate?: string;
+  startToDate?: string;
 }
 
 const ProjectList = ({
   status,
   search,
-  sortBy = "createdAt",
   sortOrder = "desc",
+  createdFromDate,
+  createdToDate,
+  startFromDate,
+  startToDate,
 }: ProjectListProps) => {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [isDetailOpen, setIsDetailOpen] = useState(false);
   const { projects, loading, error, refetch } = useProjects({
     status,
     search,
-    sortBy,
     sortOrder,
+    createdFromDate,
+    createdToDate,
+    startFromDate,
+    startToDate,
   });
   const { deleteItem } = useDelete();
 

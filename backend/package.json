@@ -2,10 +2,12 @@
   "name": "backend",
   "version": "1.0.0",
   "description": "Project tracker backend API",
-  "main": "server.ts",
+  "main": "dist/server.js",
   "scripts": {
     "dev": "nodemon server.ts",
-    "test": "NODE_ENV=test jest"
+    "test": "NODE_ENV=test jest",
+    "build": "tsc",
+    "start": "node dist/server.js"
   },
   "keywords": [],
   "author": "",

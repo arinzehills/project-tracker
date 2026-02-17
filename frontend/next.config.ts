@@ -9,6 +9,8 @@ const nextConfig: NextConfig = {
           destination: 'http://localhost:5000/api/:path*',
         },
       ],
+      afterFiles: [],
+      fallback: [],
     };
   },
 };

@@ -75,6 +75,7 @@ const CustomDropDown: React.FC<CustomDropDownProps> = ({
 
   useEffect(() => {
     getSelectedOption();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [defaultValue]);
 
   return (

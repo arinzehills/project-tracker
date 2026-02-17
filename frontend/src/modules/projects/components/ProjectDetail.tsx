@@ -56,7 +56,7 @@ const ProjectDetail: React.FC<ProjectDetailProps> = ({
     onClose();
   };
 
-  const handleStatusUpdate = async (newStatus: StatusType) => {
+  const handleStatusUpdate = async (newStatus: string) => {
     if (!project) return;
     try {
       await updateItem(
@@ -69,14 +69,14 @@ const ProjectDetail: React.FC<ProjectDetailProps> = ({
           invalidate: "projects",
         },
       );
-      setCurrentStatus(newStatus);
+      setCurrentStatus(newStatus as StatusType);
     } catch (error) {
       console.error("Failed to update status:", error);
       setCurrentStatus(project.status);
     }
   };
 
-  const handlePriorityUpdate = async (newPriority: PriorityType) => {
+  const handlePriorityUpdate = async (newPriority: string) => {
     if (!project) return;
     try {
       await updateItem(
@@ -89,7 +89,7 @@ const ProjectDetail: React.FC<ProjectDetailProps> = ({
           invalidate: "projects",
         },
       );
-      setCurrentPriority(newPriority);
+      setCurrentPriority(newPriority as PriorityType);
     } catch (error) {
       console.error("Failed to update priority:", error);
       setCurrentPriority(project.priority);
