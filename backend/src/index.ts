@@ -30,7 +30,7 @@ app.use((_req: Request, res: Response, next) => {
 });
 
 // Serve static frontend files (Next.js build output)
-app.use(express.static(path.join(__dirname, '../public')));
+app.use(express.static(path.join(__dirname, '../../public')));
 
 // API Routes (before static file fallback)
 app.use('/api/projects', projectRouter);
@@ -42,7 +42,7 @@ app.get('/api', (req: Request, res: Response) => {
 
 // Fallback to index.html for SPA (Next.js routes)
 app.get('*', (req: Request, res: Response) => {
-  res.sendFile(path.join(__dirname, '../public', 'index.html'));
+  res.sendFile(path.join(__dirname, '../../public', 'index.html'));
 });
 
 // Error handling middleware (must be last)
