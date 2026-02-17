@@ -8,7 +8,7 @@
     "start": "node backend/dist/server.js",
     "server": "nodemon backend/server.ts",
     "client": "npm run dev --prefix frontend",
-    "build-client": "npm run build --prefix frontend && npm run move-build",
+    "build-client": "npm i --prefix frontend && npm run build --prefix frontend && npm run move-build",
     "move-build": "rm -rf backend/public && cp -r frontend/.next backend/public",
     "build": "npm i && npm run build:backend && npm run build-client",
     "build:backend": "cd backend && npm i && tsc"
