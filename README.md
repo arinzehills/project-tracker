@@ -91,6 +91,37 @@ All tests use:
 - **Supertest** for HTTP assertions
 - **MongoDB test database** for integration tests
 
+## Deployment
+
+### Strategy: Monolithic Architecture
+Frontend (Next.js) is built and served from the backend (Express). Single Node.js process handles both API and static assets.
+
+### Build & Deploy
+```bash
+# Build production bundle
+npm run build
+
+# Runs: backend TypeScript compilation + frontend Next.js build + moves .next to backend/public
+
+# Start production server
+npm start
+
+# Runs: node backend/dist/server.js on port 5000 or 10000 (Render)
+```
+
+### Deploy to Render
+1. Connect GitHub repo to Render
+2. Create Web Service:
+   - **Build Command**: `npm run build`
+   - **Start Command**: `npm start`
+   - **Environment**: `DB_URI=<mongodb_uri>`
+3. Deploy - takes ~3 minutes
+
+Backend serves:
+- API at `/api/projects`
+- Frontend at `/` (all routes)
+- Single unified deployment
+
 ## Features
 
 ### Core Features
