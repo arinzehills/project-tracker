@@ -5,7 +5,7 @@ import {
   _updateProjectStatus,
   _deleteProject,
 } from '../project.service';
-import { Project } from '../schema/Project';
+import { Project } from '../models/projectModel';
 import mongoose from 'mongoose';
 
 // Mock Mongoose

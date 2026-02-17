@@ -1,72 +1,53 @@
 "use client";
 
 import { useState } from "react";
-import ProjectList from "./components/ProjectList";
+import { Icon } from "@iconify/react";
+
+import ProjectListGrouped from "./components/ProjectListGrouped";
+import ProjectGridGrouped from "./components/ProjectGridGrouped";
 import ProjectSearch from "./components/ProjectSearch";
 import ProjectFilter from "./components/ProjectFilter";
 import ActiveFilterChips from "./components/ActiveFilterChips";
 import Button from "@components/Button";
 import AddProjectModal from "./components/AddProjectModal";
+import { useProjectView } from "./hooks/useProjectView";
+import { useProjectFilters } from "./hooks/useProjectFilters";
+import { useProjects } from "@/core/hooks/useProjects";
+import { useDelete } from "@/core/hooks/useDelete";
+import { filterFields } from "./data/filterFields";
 
 const Projects = () => {
-  const [filters, setFilters] = useState<Record<string, string>>({});
-  const [search, setSearch] = useState<string>("");
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearch(e.target.value);
-  };
+  const {
+    filters,
+    search,
+    handleSearchChange,
+    clearSearch,
+    handleFilterChange,
+    handleRemoveFilter,
+    handleClearAllFilters,
+  } = useProjectFilters();
 
-  const clearSearch = () => {
-    setSearch("");
-  };
+  const { toggleView, isList, isGrid } = useProjectView();
+  const { projects, loading, error, refetch } = useProjects({
+    status: filters.status,
+    search,
+    sortBy: filters.sortBy || "createdAt",
+    sortOrder: filters.sortOrder || "desc",
+  });
+  const { deleteItem } = useDelete();
 
-  const handleFilterChange = (newFilters: Record<string, string>) => {
-    setFilters(newFilters);
+  const handleDeleteProject = async (projectId: string) => {
+    try {
+      await deleteItem(`/projects/${projectId}`, {
+        canToastSuccess: true,
+        invalidate: "projects",
+      });
+    } catch (error) {
+      console.error("Failed to delete project:", error);
+    }
   };
-
-  const handleRemoveFilter = (key: string) => {
-    setFilters((prev) => {
-      const updated = { ...prev };
-      delete updated[key];
-      return updated;
-    });
-  };
-
-  const handleClearAllFilters = () => {
-    setFilters({});
-  };
-
-  const filterFields = [
-    {
-      key: "status",
-      label: "Status",
-      type: "select" as const,
-      options: [
-        { value: "active", label: "Active" },
-        { value: "on_hold", label: "On Hold" },
-        { value: "completed", label: "Completed" },
-      ],
-    },
-    {
-      key: "sortBy",
-      label: "Sort By",
-      type: "select" as const,
-      options: [
-        { value: "createdAt", label: "Created Date" },
-        { value: "startDate", label: "Start Date" },
-      ],
-    },
-    {
-      key: "sortOrder",
-      label: "Order",
-      type: "select" as const,
-      options: [
-        { value: "desc", label: "Newest First" },
-        { value: "asc", label: "Oldest First" },
-      ],
-    },
-  ];
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -83,7 +64,7 @@ const Projects = () => {
 
         {/* Search & Filter Bar */}
         <div className="bg-white rounded-lg shadow-md p-6 mb-6 overflow-visible flex justify-between">
-          <div className="flex flex-col sm:flex-row gap-4 items-center justify-between">
+          <div className="flex flex-col sm:flex-row gap-4 items-center justify-between flex-1">
             <ProjectSearch
               searchTerm={search}
               handleSearchChange={handleSearchChange}
@@ -98,6 +79,24 @@ const Projects = () => {
               />
             </div>
           </div>
+
+          {/* View Toggle Button */}
+        </div>
+        <div className="flex items-center gap-4 my-2 justify-end">
+          <button
+            onClick={toggleView}
+            className="p-2 rounded-lg border border-gray-200 hover:bg-gray-50 transition-colors flex items-center justify-center gap-2 h-12"
+            title={`Switch to ${isGrid ? "list" : "grid"} view`}
+          >
+            <Icon
+              icon={isGrid ? "mdi:format-list-bulleted" : "flowbite:grid-solid"}
+              className="text-xl text-gray-600"
+            />
+            <span className="text-xs font-medium text-gray-600 hidden sm:inline">
+              {isGrid ? "List" : "Grid"}
+            </span>
+          </button>
+
           <Button
             onClick={() => setIsAddModalOpen(true)}
             buttonColor="bg-indigo-600 hover:bg-indigo-700"
@@ -130,13 +129,24 @@ const Projects = () => {
           />
         )}
 
-        {/* Project List */}
-        <ProjectList
-          status={filters.status}
-          search={search}
-          sortBy={filters.sortBy || "createdAt"}
-          sortOrder={filters.sortOrder || "desc"}
-        />
+        {/* Project List/Grid - Grouped by Status */}
+        {isList ? (
+          <ProjectListGrouped
+            projects={projects}
+            loading={loading}
+            error={error}
+            onRefetch={refetch}
+            onDelete={handleDeleteProject}
+          />
+        ) : (
+          <ProjectGridGrouped
+            projects={projects}
+            loading={loading}
+            error={error}
+            onRefetch={refetch}
+            onDelete={handleDeleteProject}
+          />
+        )}
       </div>
       <AddProjectModal
         isOpen={isAddModalOpen}

@@ -1,7 +1,7 @@
 import request from 'supertest';
 import { app } from '../index';
 import mongoose from 'mongoose';
-import { Project } from '../modules/projects/schema/Project';
+import { Project } from '../modules/projects/schema/projectModel';
 
 describe('Projects API Integration Tests', () => {
   let projectId: string;

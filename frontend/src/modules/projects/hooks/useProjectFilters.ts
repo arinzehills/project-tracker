@@ -13,8 +13,8 @@ export const useProjectFilters = () => {
   const [filters, setFilters] = useState<Record<string, string>>({});
   const [search, setSearch] = useState<string>('');
 
-  const handleSearchChange = (value: string) => {
-    setSearch(value);
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearch(e.target.value);
   };
 
   const clearSearch = () => {

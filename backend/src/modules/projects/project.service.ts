@@ -1,4 +1,4 @@
-import { Project } from './schema/Project';
+import { Project } from './models/projectModel';
 import { ProjectStatus } from './types';
 
 const validTransitions: Record<ProjectStatus, ProjectStatus[]> = {
