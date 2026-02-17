@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import DashboardSidebar, { SidebarLink } from './DashboardSidebar';
 import DashboardHeader from './DashboardHeader';
+import AddProjectModal from '@/modules/projects/components/AddProjectModal';
 
 interface DashboardLayoutProps {
   sidebarLinks: SidebarLink[];
@@ -14,16 +15,25 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
   children,
 }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
   const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
   const closeSidebar = () => setSidebarOpen(false);
+
+  // Update sidebar links to include onClick for "Create Project"
+  const enhancedSidebarLinks = sidebarLinks.map(link => {
+    if (link.name === 'Create Project') {
+      return { ...link, onClick: () => setIsAddModalOpen(true) };
+    }
+    return link;
+  });
 
   return (
     <div className="h-screen bg-gray-50 w-screen flex">
       <DashboardSidebar
         isOpen={sidebarOpen}
         onClose={closeSidebar}
-        sidebarLinks={sidebarLinks}
+        sidebarLinks={enhancedSidebarLinks}
       />
 
       <div className="flex-1 flex flex-col">
@@ -33,6 +43,14 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
           {children}
         </main>
       </div>
+
+      <AddProjectModal
+        isOpen={isAddModalOpen}
+        onClose={() => setIsAddModalOpen(false)}
+        onSuccess={() => {
+          // Optional: You can add additional success logic here
+        }}
+      />
     </div>
   );
 };

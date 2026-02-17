@@ -82,15 +82,14 @@ const Projects = () => {
         </div>
 
         {/* Search & Filter Bar */}
-        <div className="bg-white rounded-lg shadow-md p-6 mb-6 overflow-visible">
+        <div className="bg-white rounded-lg shadow-md p-6 mb-6 overflow-visible flex justify-between">
           <div className="flex flex-col sm:flex-row gap-4 items-center justify-between">
-            <div className="w-full  ">
-              <ProjectSearch
-                searchTerm={search}
-                handleSearchChange={handleSearchChange}
-                clearSearch={clearSearch}
-              />
-            </div>
+            <ProjectSearch
+              searchTerm={search}
+              handleSearchChange={handleSearchChange}
+              clearSearch={clearSearch}
+            />
+
             <div className="w-full sm:w-auto">
               <ProjectFilter
                 fields={filterFields}
@@ -98,14 +97,14 @@ const Projects = () => {
                 initialFilters={filters}
               />
             </div>
-            <Button
-              onClick={() => setIsAddModalOpen(true)}
-              buttonColor="bg-indigo-600 hover:bg-indigo-700"
-              textColor="text-white"
-            >
-              + Add Project
-            </Button>
           </div>
+          <Button
+            onClick={() => setIsAddModalOpen(true)}
+            buttonColor="bg-indigo-600 hover:bg-indigo-700"
+            textColor="text-white"
+          >
+            + Add Project
+          </Button>
         </div>
 
         {/* Active Filters Display */}

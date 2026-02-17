@@ -25,6 +25,7 @@ export const ProjectSearch: React.FC<SearchInputProps> = ({
         type="text"
         placeholder="Search projects by name or client..."
         value={searchTerm}
+        style={{ height: "3rem", width: "400px", padding: 20 }}
         onChange={handleSearchChange}
         className="w-full pl-12 pr-12 pl-2py-3 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition-all text-sm"
       />

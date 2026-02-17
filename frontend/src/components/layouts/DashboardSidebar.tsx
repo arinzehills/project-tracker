@@ -9,6 +9,7 @@ export interface SidebarLink {
   name: string;
   url: string;
   icon: string;
+  onClick?: () => void;
 }
 
 interface SidebarProps {
@@ -83,27 +84,48 @@ const DashboardSidebar: React.FC<SidebarProps> = ({
               <ul className="space-y-2">
                 {sidebarLinks?.map((item) => {
                   const isActive = pathname === item.url;
+
                   return (
                     <li key={item.name}>
-                      <Link
-                        href={item.url}
-                        onClick={handleLinkClick}
-                        className={`flex items-center p-3 font-medium gap-x-3 hover:bg-gray-50 rounded-lg transition-all duration-200 ${
-                          isActive
-                            ? 'bg-blue-50 text-blue-700 border-r-2 border-blue-600'
-                            : 'text-gray-600 hover:text-gray-900'
-                        }`}
-                      >
-                        <Icon
-                          icon={item.icon}
-                          className={`flex-shrink-0 text-xl ${isActive ? 'text-blue-700' : 'text-gray-400'}`}
-                        />
-                        {expanded && (
-                          <span className="duration-300 origin-left text-sm">
-                            {item.name}
-                          </span>
-                        )}
-                      </Link>
+                      {item.onClick ? (
+                        <button
+                          onClick={() => {
+                            handleLinkClick();
+                            item.onClick?.();
+                          }}
+                          className={`w-full flex items-center p-3 font-medium gap-x-3 hover:bg-gray-50 rounded-lg transition-all duration-200 text-gray-600 hover:text-gray-900`}
+                        >
+                          <Icon
+                            icon={item.icon}
+                            className={`flex-shrink-0 text-xl text-gray-400`}
+                          />
+                          {expanded && (
+                            <span className="duration-300 origin-left text-sm">
+                              {item.name}
+                            </span>
+                          )}
+                        </button>
+                      ) : (
+                        <Link
+                          href={item.url}
+                          onClick={handleLinkClick}
+                          className={`flex items-center p-3 font-medium gap-x-3 hover:bg-gray-50 rounded-lg transition-all duration-200 ${
+                            isActive
+                              ? 'bg-blue-50 text-blue-700 border-r-2 border-blue-600'
+                              : 'text-gray-600 hover:text-gray-900'
+                          }`}
+                        >
+                          <Icon
+                            icon={item.icon}
+                            className={`flex-shrink-0 text-xl ${isActive ? 'text-blue-700' : 'text-gray-400'}`}
+                          />
+                          {expanded && (
+                            <span className="duration-300 origin-left text-sm">
+                              {item.name}
+                            </span>
+                          )}
+                        </Link>
+                      )}
                     </li>
                   );
                 })}

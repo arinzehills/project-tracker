@@ -6,6 +6,10 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Project } from "../types/project";
 import { usePatch } from "@/core/hooks/usePatch";
 import UpdateStateListComponent from "./UpdateStateListComponent";
+import { getDaysRemaining } from "../utils/getDaysRemaining";
+import { formatDateRange, formatMetadataDate } from "../utils/dateFormatter";
+import Button from "@/components/Button";
+import ConfirmModal from "@/components/AnimatedModal/ConfirmModal";
 
 interface ProjectDetailProps {
   isOpen: boolean;
@@ -26,6 +30,7 @@ const ProjectDetail: React.FC<ProjectDetailProps> = ({
   const [currentPriority, setCurrentPriority] = useState(
     project?.priority || "medium",
   );
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const { updateItem } = usePatch();
 
   // Update when project changes
@@ -48,25 +53,15 @@ const ProjectDetail: React.FC<ProjectDetailProps> = ({
     low: { bg: "bg-lime-100", text: "text-lime-800" },
   };
 
-  // Calculate days remaining
-  const getDaysRemaining = () => {
-    if (!project?.endDate) return "N/A";
-    const endDate = new Date(project.endDate);
-    const today = new Date();
-    const diffTime = endDate.getTime() - today.getTime();
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-    if (diffDays < 0) return `${Math.abs(diffDays)} days overdue`;
-    if (diffDays === 0) return "Due today";
-    return `${diffDays} days remaining`;
+  const handleDeleteClick = () => {
+    setIsDeleteModalOpen(true);
   };
 
-  const handleDelete = () => {
+  const handleConfirmDelete = () => {
     if (!project) return;
-    if (confirm(`Are you sure you want to delete "${project.name}"?`)) {
-      onDelete(project._id);
-      onClose();
-    }
+    onDelete(project._id);
+    setIsDeleteModalOpen(false);
+    onClose();
   };
 
   const handleStatusUpdate = async (newStatus: string) => {
@@ -223,128 +218,114 @@ const ProjectDetail: React.FC<ProjectDetailProps> = ({
                     />
                   </div>
 
-                  {/* Dates */}
-                  <div className="bg-gradient-to-r from-purple-50 via-pink-50 to-purple-50 rounded-lg p-4 space-y-4">
-                    <div className="flex items-center gap-3">
+                  {/* Project Duration */}
+                  <div>
+                    <p className="text-xs font-semibold text-gray-500 uppercase mb-3">
+                      Project Duration
+                    </p>
+                    <div
+                      className="flex items-center gap-3 bg-gray-100 rounded-full px-4 py-2 mb-4 w-[200px]"
+                      style={{ width: 300 }}
+                    >
                       <Icon
-                        icon="mdi:calendar-start"
-                        className="text-2xl text-purple-600"
+                        icon="mdi:calendar"
+                        className="text-lg text-gray-600"
                       />
-                      <div>
-                        <p className="text-xs text-gray-600 font-medium">
-                          Start Date
-                        </p>
-                        <p className="text-sm font-semibold text-gray-900">
-                          {new Date(project.startDate).toLocaleDateString(
-                            "en-US",
-                            {
-                              year: "numeric",
-                              month: "long",
-                              day: "numeric",
-                            },
-                          )}
-                        </p>
-                      </div>
+                      <span className="text-sm font-medium text-gray-900">
+                        {formatDateRange(project.startDate, project.endDate)}
+                      </span>
                     </div>
-
-                    {project.endDate && (
-                      <div className="flex items-center gap-3 pt-3 border-t border-purple-100">
-                        <Icon
-                          icon="mdi:calendar-end"
-                          className="text-2xl text-pink-600"
-                        />
-                        <div>
-                          <p className="text-xs text-gray-600 font-medium">
-                            End Date
-                          </p>
-                          <p className="text-sm font-semibold text-gray-900">
-                            {new Date(project.endDate).toLocaleDateString(
-                              "en-US",
-                              {
-                                year: "numeric",
-                                month: "long",
-                                day: "numeric",
-                              },
-                            )}
-                          </p>
-                        </div>
-                      </div>
-                    )}
                   </div>
 
                   {/* Time Remaining Card */}
-                  <div className="bg-gradient-to-br from-indigo-50 to-blue-50 rounded-lg p-6 border border-indigo-100">
-                    <div className="flex items-start gap-4">
-                      <Icon
-                        icon="mdi:clock-outline"
-                        className="text-3xl text-indigo-600 mt-1"
-                      />
+                  <div
+                    className="rounded-xl p-2 rounded-lg flex items-center justify-between"
+                    style={{
+                      background: "linear-gradient(to right, #e9d5ff, #f3e8ff)",
+                    }}
+                  >
+                    <div className="flex items-center gap-4">
+                      <div className="w-10 h-10 rounded-full bg-black/10 flex items-center justify-center">
+                        <Icon
+                          icon="mdi:clock-outline"
+                          className="text-xl text-black"
+                        />
+                      </div>
                       <div>
-                        <p className="text-xs text-gray-600 font-medium uppercase">
+                        <p className="text-xs text-gray-700 font-medium">
                           Time Remaining
                         </p>
-                        <p className="text-lg font-bold text-gray-900 mt-2">
-                          {getDaysRemaining()}
-                        </p>
                       </div>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <p className="text-lg font-bold text-gray-900">
+                        {getDaysRemaining(project)}
+                      </p>
+                      <Icon
+                        icon="mdi:information-outline"
+                        className="text-xl text-gray-600"
+                      />
                     </div>
                   </div>
 
                   {/* Metadata */}
-                  <div className="pt-4 border-t border-gray-200 space-y-3">
+                  <div className="pt-4 border-t border-gray-200 space-y-3 mb-8 mt-8 flex gap-4">
                     <div>
                       <p className="text-xs text-gray-500 font-medium">
                         Created
                       </p>
                       <p className="text-sm text-gray-900 mt-1">
-                        {new Date(project.createdAt).toLocaleDateString(
-                          "en-US",
-                          {
-                            year: "numeric",
-                            month: "short",
-                            day: "numeric",
-                          },
-                        )}
+                        {formatMetadataDate(project.createdAt)}
                       </p>
                     </div>
                     <div>
-                      <p className="text-xs text-gray-500 font-medium">
+                      <p className="text-xs text-gray-500 font-medium ">
                         Last Updated
                       </p>
                       <p className="text-sm text-gray-900 mt-1">
-                        {new Date(project.updatedAt).toLocaleDateString(
-                          "en-US",
-                          {
-                            year: "numeric",
-                            month: "short",
-                            day: "numeric",
-                          },
-                        )}
+                        {formatMetadataDate(project.updatedAt)}
                       </p>
                     </div>
                   </div>
 
                   {/* Actions */}
-                  <div className="flex gap-3 pt-6 border-t border-gray-200">
-                    <button
+                  <div className="flex gap-3 pt-6 border-t border-gray-200 mt-10">
+                    <Button
+                      buttonColor="bg-white"
+                      textColor="text-black"
+                      borderClass="border border-black-200"
                       onClick={onClose}
-                      className="flex-1 px-4 py-2.5 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition font-medium"
                     >
                       Close
-                    </button>
-                    <button
-                      onClick={handleDelete}
+                    </Button>
+                    <Button
+                      onClick={handleDeleteClick}
+                      width="12"
                       className="flex-1 px-4 py-2.5 bg-red-600 text-white rounded-lg hover:bg-red-700 transition font-medium flex items-center justify-center gap-2"
                     >
                       <Icon icon="mdi:delete" className="text-lg" />
                       Delete
-                    </button>
+                    </Button>
                   </div>
                 </div>
               </>
             )}
           </motion.div>
         </>
+      )}
+
+      {/* Delete Confirmation Modal */}
+      {project && (
+        <ConfirmModal
+          openModal={isDeleteModalOpen}
+          setOpenModal={setIsDeleteModalOpen}
+          onConfirm={handleConfirmDelete}
+          type="delete"
+          title="Delete Project"
+          message={`Are you sure you want to delete "${project.name}"? This action cannot be undone.`}
+          confirmText="Delete"
+          cancelText="Cancel"
+        />
       )}
     </AnimatePresence>
   );
